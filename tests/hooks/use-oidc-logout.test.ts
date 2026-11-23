@@ -17,7 +17,6 @@ const mockExports: Record<string, string[]> = {
   "@/hooks/use-permissions": ["usePermissions"],
   "@/lib/mfa-challenge": ["fetchMfaChallenge"],
   "@/lib/sts": ["getStsToken"],
-  "@/lib/api-prefix-middleware": ["addApiPrefixMiddleware"],
   "@/lib/bucket-replication-delete": ["addDeleteReplicationMiddleware"],
 }
 const constructors: Record<string, string> = {
@@ -84,7 +83,7 @@ const config = {
   api: { baseURL: "https://s3.example.test/rustfs/admin/v3" },
   s3: { endpoint: "https://s3.example.test", region: "us-east-1" },
 }
-const logoutUrl = `${config.serverHost}/rustfs/admin/v3/oidc/logout?logout_token=test-logout-token`
+const logoutUrl = `${config.api.baseURL}/oidc/logout?logout_token=test-logout-token`
 const credentials = {
   AccessKeyId: "test-access",
   SecretAccessKey: "test-secret",
@@ -164,7 +163,6 @@ async function mountDashboard(
       render ? cloneElement(render, {}, children) : createElement("button", null, children),
     fetchMfaChallenge: async () => ({ required: false }),
     getStsToken: async () => ({ ...credentials, Expiration: new Date(credentials.Expiration) }),
-    addApiPrefixMiddleware: () => {},
     addDeleteReplicationMiddleware: () => {},
     AwsClient: class {},
     ApiClient: class {
@@ -489,7 +487,7 @@ test("a session received from another tab can log out with its own OIDC token", 
   assert.equal(await mounted.logout(), true)
   assert.deepEqual(
     mounted.navigate.mock.calls.map((call) => call.arguments),
-    [[logoutUrl], [`${config.serverHost}/rustfs/admin/v3/oidc/logout?logout_token=other-tab-token`]],
+    [[logoutUrl], [`${config.api.baseURL}/oidc/logout?logout_token=other-tab-token`]],
   )
   assert.equal(mounted.auth.isAuthenticated, false)
   assert.equal(mounted.browser.localStorage.getItem("auth.credentials"), null)

@@ -40,7 +40,7 @@ const REQUEST_TIMEOUT = 5000
 const HEALTH_REQUEST_TIMEOUT = 5000
 const HEALTH_PATHS = [`${CONSOLE_BASE_PATH}/health`, "/health"] as const
 
-const getApiPrefix = (): string => (process.env.NEXT_PUBLIC_API_PREFIX || "").replace(/\/$/, "")
+const getApiPrefix = (): string => (process.env.NEXT_PUBLIC_ADMIN_API_PREFIX || "").replace(/\/$/, "")
 
 const isBrowser = (): boolean => typeof window !== "undefined"
 

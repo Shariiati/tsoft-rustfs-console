@@ -35,15 +35,15 @@ test("view catalog paths share the encoded namespace route", () => {
 })
 
 test("table catalog paths preserve a configured reverse-proxy prefix", () => {
-  const previous = process.env.NEXT_PUBLIC_API_PREFIX
-  process.env.NEXT_PUBLIC_API_PREFIX = "/console/"
+  const previous = process.env.NEXT_PUBLIC_CATALOG_API_PREFIX
+  process.env.NEXT_PUBLIC_CATALOG_API_PREFIX = "/console/"
 
   try {
     assert.equal(buildTableCatalogPath("config"), "/console/iceberg/v1/config")
     assert.equal(tableBucketCatalogPath("warehouse"), "/console/iceberg/v1/buckets/warehouse")
   } finally {
-    if (previous === undefined) delete process.env.NEXT_PUBLIC_API_PREFIX
-    else process.env.NEXT_PUBLIC_API_PREFIX = previous
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_CATALOG_API_PREFIX
+    else process.env.NEXT_PUBLIC_CATALOG_API_PREFIX = previous
   }
 })
 

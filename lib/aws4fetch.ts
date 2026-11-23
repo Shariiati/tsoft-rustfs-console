@@ -300,10 +300,19 @@ export class AwsV4Signer {
       params.set("X-Amz-SignedHeaders", this.signedHeaders)
     }
 
-    const apiPrefix = (process.env.NEXT_PUBLIC_API_PREFIX || "").replace(/\/$/, "")
+    const apiPrefixes = [process.env.NEXT_PUBLIC_ADMIN_API_PREFIX, process.env.NEXT_PUBLIC_CATALOG_API_PREFIX]
+      .map((prefix) => (prefix || "").replace(/\/+$/, ""))
+      .filter(Boolean)
+      .sort((a, b) => b.length - a.length)
+
     let signingPathname = this.url.pathname
-    if (apiPrefix && signingPathname.startsWith(apiPrefix)) {
-      signingPathname = signingPathname.slice(apiPrefix.length) || "/"
+
+    const matchedPrefix = apiPrefixes.find(
+      (prefix) => signingPathname === prefix || signingPathname.startsWith(`${prefix}/`),
+    )
+
+    if (matchedPrefix) {
+      signingPathname = signingPathname.slice(matchedPrefix.length) || "/"
     }
 
     if (this.service === "s3") {

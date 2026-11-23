@@ -70,8 +70,8 @@ function LoginPageContent() {
     const loadOidcProviders = () => {
       configManager.loadConfig().then((config) => {
         if (cancelled) return
-        if (config?.serverHost) {
-          fetchOidcProviders(config.serverHost).then((providers) => {
+        if (config?.api?.baseURL) {
+          fetchOidcProviders(config.api.baseURL).then((providers) => {
             if (!cancelled) setOidcProviders(providers)
           })
         }
@@ -178,7 +178,7 @@ function LoginPageContent() {
     setSubmitting(true)
     try {
       const config = await configManager.loadConfig()
-      initiateOidcLogin(config.serverHost, providerId)
+      initiateOidcLogin(config.api.baseURL, providerId)
     } catch {
       message.error(t("Login Failed"))
     } finally {

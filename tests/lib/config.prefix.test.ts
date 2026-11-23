@@ -3,7 +3,7 @@ import assert from "node:assert/strict"
 import { configManager } from "../../lib/config"
 import { createDefaultConfig } from "../../lib/config-helpers"
 
-const PREFIX_ENV = "NEXT_PUBLIC_API_PREFIX"
+const PREFIX_ENV = "NEXT_PUBLIC_ADMIN_API_PREFIX"
 const HOST_ENV = "NEXT_PUBLIC_SERVER_HOST"
 
 function withEnv<T>(vars: Record<string, string | undefined>, fn: () => T): T {

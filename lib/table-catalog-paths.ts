@@ -38,7 +38,7 @@ export function resolveTableCatalogPrefix(
 }
 
 function apiPrefix() {
-  const value = (process.env.NEXT_PUBLIC_API_PREFIX ?? "").trim().replace(/\/+$/, "")
+  const value = (process.env.NEXT_PUBLIC_CATALOG_API_PREFIX ?? "").trim().replace(/\/+$/, "")
   if (!value) return ""
   return value.startsWith("/") ? value : `/${value}`
 }

@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { S3Client } from "@aws-sdk/client-s3"
 import { useAuth } from "@/contexts/auth-context"
-import { addApiPrefixMiddleware } from "@/lib/api-prefix-middleware"
 import { addDeleteReplicationMiddleware } from "@/lib/bucket-replication-delete"
 import { configManager } from "@/lib/config"
 import { addS3ErrorMiddleware } from "@/lib/s3-error-middleware"
@@ -55,8 +54,6 @@ export function S3Provider({ children }: { children: React.ReactNode }) {
           sessionToken: credentials?.SessionToken || "",
         },
       })
-
-      addApiPrefixMiddleware(client)
 
       addDeleteReplicationMiddleware(client)
 

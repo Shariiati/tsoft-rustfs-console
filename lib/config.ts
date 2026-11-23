@@ -13,7 +13,7 @@ let configCacheTime = 0
 let configPromise: Promise<SiteConfig> | null = null
 const CACHE_DURATION = 60000
 
-const getApiPrefix = (): string => (process.env.NEXT_PUBLIC_API_PREFIX || "").replace(/\/$/, "")
+const getApiPrefix = (): string => (process.env.NEXT_PUBLIC_ADMIN_API_PREFIX || "").replace(/\/$/, "")
 
 function loadRuntimeConfig(): SiteConfig | null {
   try {

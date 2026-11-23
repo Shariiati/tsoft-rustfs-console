@@ -9,7 +9,7 @@ const baseOpts = {
   region: "us-east-1",
 }
 
-const PREFIX_ENV = "NEXT_PUBLIC_API_PREFIX"
+const PREFIX_ENV = "NEXT_PUBLIC_ADMIN_API_PREFIX"
 
 function withEnv<T>(value: string | undefined, fn: () => T): T {
   const prev = process.env[PREFIX_ENV]

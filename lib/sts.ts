@@ -1,6 +1,5 @@
 import { AssumeRoleCommand, STSClient } from "@aws-sdk/client-sts"
 import type { AwsCredentialIdentity, AwsCredentialIdentityProvider } from "@aws-sdk/types"
-import { addApiPrefixMiddleware } from "@/lib/api-prefix-middleware"
 import type { SiteConfig } from "@/types/config"
 
 /**
@@ -29,8 +28,6 @@ export async function getStsToken(
     region: customConfig.s3.region || "us-east-1",
     credentials: credentials,
   })
-
-  addApiPrefixMiddleware(stsClient)
 
   const command = new AssumeRoleCommand({
     RoleArn: roleArn,

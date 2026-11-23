@@ -176,7 +176,12 @@ async function loginPage(
     useSearchParams: () => params,
     useAuth: () => api,
     useMessage: () => feedback,
-    configManager: { loadConfig: async () => ({ serverHost: "http://fixture.test" }) },
+    configManager: {
+      loadConfig: async () => ({
+        serverHost: "http://fixture.test",
+        api: { baseURL: "http://fixture.test/rustfs/admin/v3" },
+      }),
+    },
     fetchOidcProviders: async () => [],
   })
   return {
@@ -228,7 +233,7 @@ test("login blocks duplicate submissions and binds MFA to the credentials accept
   assert.deepEqual(ui.verifications[0], [
     { accessKeyId: "alice", secretAccessKey: "first-secret" },
     { code: "123456", challenge: "challenge-1" },
-    { serverHost: "http://fixture.test" },
+    { serverHost: "http://fixture.test", api: { baseURL: "http://fixture.test/rustfs/admin/v3" } },
   ])
 })
 

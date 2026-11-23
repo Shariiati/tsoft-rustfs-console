@@ -5,12 +5,16 @@ export interface OidcLogoutSession {
   logoutToken: string
 }
 
+function normalizeApiBaseUrl(apiBaseUrl: string): string {
+  return apiBaseUrl.replace(/\/+$/, "")
+}
+
 /**
  * Fetch configured OIDC providers from the server.
  */
-export async function fetchOidcProviders(serverHost: string): Promise<OidcProvider[]> {
+export async function fetchOidcProviders(apiBaseUrl: string): Promise<OidcProvider[]> {
   try {
-    const url = `${serverHost}/rustfs/admin/v3/oidc/providers`
+    const url = `${normalizeApiBaseUrl(apiBaseUrl)}/oidc/providers`
     const response = await fetch(url, { method: "GET" })
     if (!response.ok) return []
     return await response.json()
@@ -22,8 +26,8 @@ export async function fetchOidcProviders(serverHost: string): Promise<OidcProvid
 /**
  * Build the backend OIDC authorization endpoint URL.
  */
-export function buildOidcLoginUrl(serverHost: string, providerId: string, redirectAfter?: string): string {
-  let url = `${serverHost}/rustfs/admin/v3/oidc/authorize/${encodeURIComponent(providerId)}`
+export function buildOidcLoginUrl(apiBaseUrl: string, providerId: string, redirectAfter?: string): string {
+  let url = `${normalizeApiBaseUrl(apiBaseUrl)}/oidc/authorize/${encodeURIComponent(providerId)}`
   if (redirectAfter) {
     url += `?redirect_after=${encodeURIComponent(redirectAfter)}`
   }
@@ -33,18 +37,17 @@ export function buildOidcLoginUrl(serverHost: string, providerId: string, redire
 /**
  * Redirect the browser to the OIDC authorization endpoint.
  */
-export function initiateOidcLogin(serverHost: string, providerId: string, redirectAfter?: string): void {
-  const url = buildOidcLoginUrl(serverHost, providerId, redirectAfter)
+export function initiateOidcLogin(apiBaseUrl: string, providerId: string, redirectAfter?: string): void {
+  const url = buildOidcLoginUrl(apiBaseUrl, providerId, redirectAfter)
   window.location.href = new URL(url, window.location.origin).href
 }
 
 /**
- * Build the backend logout endpoint URL. The backend decides whether to perform
- * RP-initiated logout with the IdP or fall back to the console login page.
+ * Build the backend logout endpoint URL.
  */
-export function buildOidcLogoutUrl(serverHost: string, logoutToken: string): string {
-  const base = serverHost.replace(/\/$/, "")
-  return `${base}/rustfs/admin/v3/oidc/logout?logout_token=${encodeURIComponent(logoutToken)}`
+export function buildOidcLogoutUrl(apiBaseUrl: string, logoutToken: string): string {
+  const base = normalizeApiBaseUrl(apiBaseUrl)
+  return `${base}/oidc/logout?logout_token=${encodeURIComponent(logoutToken)}`
 }
 
 /**

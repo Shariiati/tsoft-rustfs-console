@@ -294,7 +294,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loggingOutRef.current = true
     try {
       const config = await configManager.loadConfig()
-      const logoutUrl = buildOidcLogoutUrl(config.serverHost, oidcSession.logoutToken)
+      const logoutUrl = buildOidcLogoutUrl(config.api.baseURL, oidcSession.logoutToken)
 
       logout()
       window.location.href = logoutUrl
